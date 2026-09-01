@@ -6,6 +6,10 @@ import { url } from "@utils/url-utils.ts";
 import { onMount } from "svelte";
 import type { SearchResult } from "@/global";
 
+// Accept Astro client:only directive without type errors
+type Props = Record<string, any>;
+let { props }: Props = $props();
+
 let keywordDesktop = "";
 let keywordMobile = "";
 let result: SearchResult[] = [];
@@ -125,17 +129,21 @@ onMount(() => {
 	}
 });
 
-$: if (initialized && keywordDesktop) {
-	(async () => {
-		await search(keywordDesktop, true);
-	})();
-}
+$effect(() => {
+	if (initialized && keywordDesktop) {
+		(async () => {
+			await search(keywordDesktop, true);
+		})();
+	}
+});
 
-$: if (initialized && keywordMobile) {
-	(async () => {
-		await search(keywordMobile, false);
-	})();
-}
+$effect(() => {
+	if (initialized && keywordMobile) {
+		(async () => {
+			await search(keywordMobile, false);
+		})();
+	}
+});
 </script>
 
 <!-- search bar for desktop view -->

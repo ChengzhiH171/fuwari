@@ -13,7 +13,9 @@ import {
 	BANNER_HEIGHT_EXTEND,
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
 } from "../constants/constants";
+import { pathsEqual, url } from "../utils/url-utils";
 import Layout from "./Layout.astro";
+import HeroBanner from "./HeroBanner.astro";
 
 interface Props {
 	title?: string;
@@ -39,28 +41,45 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 const mainPanelTop = siteConfig.banner.enable
 	? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
 	: "5.5rem";
+
+// Home page uses a full-screen hero banner with a fixed, semi-transparent
+// glass navbar and a scroll-down arrow, instead of the regular overlap banner.
+const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
+const isHomeHero = isHomePage && siteConfig.banner.enable;
 ---
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
-<!-- Navbar -->
 <slot slot="head" name="head"></slot>
-<div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
-    <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
-        <Navbar></Navbar>
-    </div>
-</div>
 
-<!-- Banner -->
-{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
-    <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                  src={siteConfig.banner.src} position={siteConfig.banner.position}
-    >
-    </ImageWrapper>
-</div>}
+{isHomeHero ? (
+    <>
+        <!-- Full-screen hero banner (contains #banner + scroll-down arrow) -->
+        <HeroBanner banner={siteConfig.banner.src} position={siteConfig.banner.position}></HeroBanner>
+        <!-- Fixed, semi-transparent glass navbar overlaying the hero -->
+        <Navbar hero={true}></Navbar>
+    </>
+) : (
+    <>
+        <!-- Navbar -->
+        <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
+            <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
+                <Navbar></Navbar>
+            </div>
+        </div>
+
+        <!-- Banner -->
+        {siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
+            <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
+                          src={siteConfig.banner.src} position={siteConfig.banner.position}
+            >
+            </ImageWrapper>
+        </div>}
+    </>
+)}
 
 <!-- Main content -->
-<div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
+<div class:list={["w-full z-30 pointer-events-none", isHomeHero ? "relative" : "absolute"]} style={!isHomeHero ? `top: ${mainPanelTop}` : undefined}>
     <!-- The pointer-events-none here prevent blocking the click event of the TOC -->
     <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]

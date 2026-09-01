@@ -1,0 +1,63 @@
+---
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "../config";
+
+interface Props {
+    banner?: string;
+    position?: string;
+}
+
+const { banner = siteConfig.banner.src, position = siteConfig.banner.position || "center" } = Astro.props;
+---
+<div id="hero-banner-wrapper" class="relative z-0 w-full h-screen overflow-hidden">
+    <ImageWrapper id="banner" alt="Banner image of the blog"
+                  class:list={["object-cover w-full h-full transition duration-700 opacity-0 scale-105"]}
+                  src={banner} position={position}
+    >
+    </ImageWrapper>
+    <!-- Gradient overlay to improve text contrast over the banner image -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/40 pointer-events-none z-10"></div>
+
+    <!-- Hero content: site title & subtitle, centered -->
+    <div class="absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
+        <h1 class="text-5xl md:text-7xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] mb-4 tracking-wide onload-animation">
+            {siteConfig.title}
+        </h1>
+        <p class="text-lg md:text-2xl text-white/95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] max-w-2xl onload-animation" style="animation-delay: 100ms">
+            {siteConfig.subtitle}
+        </p>
+    </div>
+
+    <!-- Scroll-down indicator: bouncing arrow that scrolls to the main content -->
+    <button id="hero-scroll-arrow" class="scroll-down-indicator group"
+            aria-label="向下滚动到内容区"
+    >
+        <Icon name="material-symbols:keyboard-arrow-down-rounded"
+              class="scroll-down-icon text-white/90 group-hover:text-white transition-colors"
+        />
+    </button>
+</div>
+
+<script>
+(function initHeroBanner() {
+    // Reveal the banner image (remove the initial opacity-0 / scale-105)
+    const banner = document.getElementById('banner');
+    if (banner) {
+        banner.classList.remove('opacity-0', 'scale-105');
+    }
+
+    // Wire the scroll-down arrow to smoothly scroll to the main content
+    const arrow = document.getElementById('hero-scroll-arrow');
+    if (arrow) {
+        arrow.addEventListener('click', () => {
+            const target = document.getElementById('main-grid');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            }
+        });
+    }
+})();
+</script>

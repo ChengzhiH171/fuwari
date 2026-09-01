@@ -9,7 +9,13 @@ import Search from "./Search.svelte";
 import DisplaySettings from "./widget/DisplaySettings.svelte";
 import NavMenuPanel from "./widget/NavMenuPanel.astro";
 
+interface Props {
+	class?: string;
+	hero?: boolean;
+}
+
 const className = Astro.props.class;
+const { hero = false } = Astro.props;
 
 let links: NavBarLink[] = navBarConfig.links.map(
 	(item: NavBarLink | LinkPreset): NavBarLink => {
@@ -20,11 +26,17 @@ let links: NavBarLink[] = navBarConfig.links.map(
 	},
 );
 ---
-<div id="navbar" class="z-50 onload-animation">
-    <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
+<div id="navbar" class:list={["z-50 onload-animation", {"fixed top-0 left-0 right-0": hero}]}
+     data-transparent-mode={hero ? "semi" : undefined}
+     style={hero ? "--navbar-glass-blur: 8px;" : undefined}
+>
+    <div class:list={["absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition", {"!bg-transparent": hero}]}></div> <!-- used for onload animation -->
     <div class:list={[
         className,
-        "card-base !overflow-visible max-w-[var(--page-width)] h-[4.5rem] !rounded-t-none mx-auto flex items-center justify-between px-4"]}>
+        hero
+            ? "hero-navbar !overflow-visible w-full h-[4.5rem] !rounded-none flex items-center justify-between px-4 md:px-8"
+            : "card-base !overflow-visible max-w-[var(--page-width)] h-[4.5rem] !rounded-t-none mx-auto flex items-center justify-between px-4"
+    ]}>
         <a href={url('/')} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
             <div class="flex flex-row text-[var(--primary)] items-center text-md">
                 <Icon name="material-symbols:home-outline-rounded" class="text-[1.75rem] mb-1 mr-2" />
