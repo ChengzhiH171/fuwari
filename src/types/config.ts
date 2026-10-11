@@ -100,3 +100,39 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type MusicTrack = {
+	/** 歌曲名 */
+	title: string;
+	/** 歌手名 */
+	artist: string;
+	/** 封面图 URL 或路径（相对于 /public 目录以 / 开头，否则为网络地址） */
+	cover?: string;
+	/** 音频文件 URL */
+	url: string;
+};
+
+export type MusicConfig = {
+	enable: boolean;
+	/** 侧边栏标题，默认 "音乐" */
+	name?: string;
+	tracks: MusicTrack[];
+};
+
+export type WeatherConfig = {
+	enable: boolean;
+	/** 显示的位置名称，例如 "重庆城区 沙坪坝区" */
+	location: string;
+	/** 纬度，用于 Open-Meteo 查询 */
+	latitude: number;
+	/** 经度，用于 Open-Meteo 查询 */
+	longitude: number;
+	/** "更多" 按钮跳转链接 */
+	moreUrl: string;
+};
+
+export type CalendarWidgetConfig = {
+	enable: boolean;
+	/** 侧边栏标题，默认 "日期" */
+	name?: string;
+};

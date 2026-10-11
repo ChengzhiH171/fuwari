@@ -1,9 +1,12 @@
 import type {
 	ExpressiveCodeConfig,
+	CalendarWidgetConfig,
 	LicenseConfig,
+	MusicConfig,
 	NavBarConfig,
 	ProfileConfig,
 	SiteConfig,
+	WeatherConfig,
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
@@ -86,4 +89,40 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
 	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
+};
+
+export const musicConfig: MusicConfig = {
+	enable: true,
+	name: "音乐",
+	tracks: [
+		{
+			title: "spiral (TV动画《葬送的芙莉莲》ED)",
+			artist: "MF移凰 / 森島Melon",
+			// cover: "/music/cover.jpg", // 可选，相对 /public 目录或网络地址
+			url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+		},
+		{
+			title: "Demo Song 2",
+			artist: "SoundHelix",
+			url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+		},
+		{
+			title: "Demo Song 3",
+			artist: "SoundHelix",
+			url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+		},
+	],
+};
+
+export const weatherConfig: WeatherConfig = {
+	enable: true,
+	location: "重庆城区 沙坪坝区",
+	latitude: 29.541,
+	longitude: 106.456,
+	moreUrl: "https://www.weather.com.cn/weather1d/101040100.shtml",
+};
+
+export const calendarWidgetConfig: CalendarWidgetConfig = {
+	enable: true,
+	name: "日期",
 };

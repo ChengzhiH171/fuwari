@@ -1,0 +1,29 @@
+---
+import { calendarWidgetConfig } from "../../config";
+import { getCollection } from "astro:content";
+import WidgetLayout from "./WidgetLayout.astro";
+import CalendarCard from "./CalendarCard.svelte";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+const className = Astro.props.class;
+const style = Astro.props.style;
+
+const enabled = calendarWidgetConfig.enable;
+
+// 汇总所有非草稿文章的发布日期（YYYY-MM-DD）
+const posts = await getCollection("posts", ({ data }) => {
+	return import.meta.env.PROD ? data.draft !== true : true;
+});
+const postDates = posts.map((p) => {
+	const d = new Date(p.data.published);
+	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+});
+---
+{enabled && (
+    <WidgetLayout name={calendarWidgetConfig.name ?? "日期"} id="calendar" class={className} style={style}>
+        <CalendarCard client:only="svelte" postDates={postDates}></CalendarCard>
+    </WidgetLayout>
+)}

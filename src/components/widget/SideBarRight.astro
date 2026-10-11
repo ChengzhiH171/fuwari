@@ -1,0 +1,17 @@
+---
+import Calendar from "./Calendar.astro";
+import Weather from "./Weather.astro";
+
+interface Props {
+	class?: string;
+}
+
+const className = Astro.props.class;
+---
+<div id="sidebar-right" class:list={[className, "w-full"]}>
+    <!-- 天气在上，日期在下；lg 以上吸附在视口右侧 -->
+    <div id="sidebar-right-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 lg:top-4 lg:sticky">
+        <Weather class="onload-animation" style="animation-delay: 250ms"></Weather>
+        <Calendar class="onload-animation" style="animation-delay: 300ms"></Calendar>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+---
+import { musicConfig } from "../../config";
+import WidgetLayout from "./WidgetLayout.astro";
+import MusicPlayer from "./MusicPlayer.svelte";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+const className = Astro.props.class;
+const style = Astro.props.style;
+
+const enabled = musicConfig.enable && musicConfig.tracks.length > 0;
+---
+{enabled && (
+    <WidgetLayout name={musicConfig.name ?? "音乐"} id="music" class={className} style={style}>
+        <MusicPlayer client:only="svelte" tracks={musicConfig.tracks}></MusicPlayer>
+    </WidgetLayout>
+)}

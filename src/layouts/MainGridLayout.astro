@@ -3,6 +3,7 @@ import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
+import SideBarRight from "@components/widget/SideBarRight.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
@@ -82,7 +83,8 @@ const isHomeHero = isHomePage && siteConfig.banner.enable;
 <div class:list={["w-full z-30 pointer-events-none", isHomeHero ? "relative" : "absolute"]} style={!isHomeHero ? `top: ${mainPanelTop}` : undefined}>
     <!-- The pointer-events-none here prevent blocking the click event of the TOC -->
     <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
-        <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]
+        <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto_auto]
+    lg:grid-cols-[17.5rem_minmax(0,1fr)_15rem] lg:grid-rows-[auto]
     mx-auto gap-4 px-0 md:px-4"
         >
             <!-- Banner image credit -->
@@ -101,7 +103,7 @@ const isHomeHero = isHomePage && siteConfig.banner.enable;
 
             <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings}></SideBar>
 
-            <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
+            <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-start-2 lg:col-span-1 overflow-hidden">
                 <div id="content-wrapper" class="onload-animation">
                     <!-- the overflow-hidden here prevent long text break the layout-->
                     <!-- make id different from windows.swup global property -->
@@ -111,6 +113,9 @@ const isHomeHero = isHomePage && siteConfig.banner.enable;
                     </div>
                 </div>
             </main>
+
+            <!-- 右侧栏：天气在上、日期在下；小屏时排在正文之后 -->
+            <SideBarRight class="col-span-2 row-start-3 lg:col-start-3 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[15rem] onload-animation"></SideBarRight>
 
             <div class="footer col-span-2 onload-animation block lg:hidden">
                 <Footer></Footer>

@@ -1,0 +1,25 @@
+---
+import { weatherConfig } from "../../config";
+import WidgetLayout from "./WidgetLayout.astro";
+import WeatherCard from "./WeatherCard.svelte";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+const className = Astro.props.class;
+const style = Astro.props.style;
+
+const enabled = weatherConfig.enable;
+---
+{enabled && (
+    <WidgetLayout name="天气预报" id="weather" class={className} style={style}>
+        <WeatherCard
+            client:only="svelte"
+            location={weatherConfig.location}
+            latitude={weatherConfig.latitude}
+            longitude={weatherConfig.longitude}
+            moreUrl={weatherConfig.moreUrl}
+        ></WeatherCard>
+    </WidgetLayout>
+)}
